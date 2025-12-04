@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "E-Commerce Store",
-  description: "Browse and shop products",
+  title: "ShopHub - Modern E-Commerce Store",
+  description: "Browse and shop products with ease. Fast, modern e-commerce built with Next.js.",
 };
 
 export default function RootLayout({

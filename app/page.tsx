@@ -135,6 +135,17 @@ const HomePage = observer(() => {
       <Header />
 
       <Container maxWidth="lg" sx={{ flex: 1, py: 4 }}>
+        {/* Hero section */}
+        {!searchQuery && selectedCategory === "all" && products.length > 0 && (
+          <Box sx={{ mb: 4, textAlign: "center" }}>
+            <Typography variant="h5" sx={{ fontWeight: 600, color: "textSecondary" }}>
+              Welcome to ShopHub
+            </Typography>
+            <Typography variant="body2" sx={{ color: "textSecondary", mt: 1 }}>
+              Discover thousands of products at great prices
+            </Typography>
+          </Box>
+        )}
         {/* Search and Filter Controls */}
         <Box
           sx={{
