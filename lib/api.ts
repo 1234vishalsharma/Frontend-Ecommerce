@@ -3,11 +3,11 @@ import { Product } from "./store";
 
 /**
  * API client for the Fake Store API (https://fakestoreapi.com)
- * 
+ *
  * This is a public, free API used for development and demo purposes.
  * In production, replace with your actual backend API.
  */
-const API_BASE = "https://fakestoreapi.com";
+const API_BASE = process.env.BASE_URL || "https://fakestoreapi.com";
 
 const api = axios.create({
   baseURL: API_BASE,

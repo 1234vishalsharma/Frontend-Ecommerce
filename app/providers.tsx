@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 
@@ -17,16 +17,46 @@ const ThemeModeContext = createContext<ThemeModeContextType | undefined>(undefin
 export const useThemeMode = () => {
   const context = useContext(ThemeModeContext);
   if (!context) {
-    throw new Error("useThemeMode must be used within ThemeProvider");
+    throw new Error("useThemeMode must be used within Providers component");
   }
   return context;
 };
 
 /**
+ * ThemeContent component - separated to ensure context is available to children
+ * This component consumes the context that was created by the parent Providers
+ */
+function ThemeContent({ children }: { children: ReactNode }) {
+  const { isDark } = useThemeMode();
+
+  const theme = createTheme({
+    palette: {
+      mode: isDark ? "dark" : "light",
+      primary: {
+        main: "#1976d2",
+      },
+      secondary: {
+        main: "#dc004e",
+      },
+    },
+    typography: {
+      fontFamily: '"Geist", sans-serif',
+    },
+  });
+
+  return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      {children}
+    </ThemeProvider>
+  );
+}
+
+/**
  * Providers component wraps the app with MUI theme and context providers
  * Handles theme persistence to localStorage
  */
-export default function Providers({ children }: { children: React.ReactNode }) {
+export default function Providers({ children }: { children: ReactNode }) {
   const [isDark, setIsDark] = useState(false);
   const [mounted, setMounted] = useState(false);
 
@@ -50,32 +80,14 @@ export default function Providers({ children }: { children: React.ReactNode }) {
     });
   };
 
-  const theme = createTheme({
-    palette: {
-      mode: isDark ? "dark" : "light",
-      primary: {
-        main: "#1976d2",
-      },
-      secondary: {
-        main: "#dc004e",
-      },
-    },
-    typography: {
-      fontFamily: '"Geist", sans-serif',
-    },
-  });
-
-  // Prevent flash of unstyled content on first load
-  if (!mounted) {
-    return <>{children}</>;
-  }
-
   return (
     <ThemeModeContext.Provider value={{ isDark, toggleTheme }}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        {children}
-      </ThemeProvider>
+      {mounted ? (
+        <ThemeContent>{children}</ThemeContent>
+      ) : (
+        // On first load before mount, just render children without theme to prevent flash
+        <>{children}</>
+      )}
     </ThemeModeContext.Provider>
   );
 }
