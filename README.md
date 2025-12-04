@@ -1,36 +1,113 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ShopHub - E-Commerce Store
+
+A modern, fast e-commerce store built with Next.js 16, React 19, and TypeScript. Featuring a product catalog with filtering, search, and a persistent shopping cart.
+
+## Features
+
+- 🛍️ Product browsing with categories and search
+- ⭐ Product ratings and detailed product pages
+- 🛒 Shopping cart with quantity management (persisted to session)
+- 🌓 Dark/Light theme toggle
+- 📱 Fully responsive design (mobile-first)
+- ⚡ Fast performance with Next.js 16 and React 19
+- 🎨 Material-UI components with Tailwind CSS
+
+## Tech Stack
+
+- **Frontend**: Next.js 16, React 19, TypeScript
+- **Styling**: Material-UI (MUI), Tailwind CSS
+- **State Management**: MobX (reactive state)
+- **API**: Fake Store API (https://fakestoreapi.com)
+- **HTTP Client**: Axios
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18+ 
+- npm or yarn
+
+### Installation
 
 ```bash
+# Clone and install dependencies
+npm install
+
+# Start dev server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Build & Deploy
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+npm start
+```
 
-## Learn More
+## Project Structure
 
-To learn more about Next.js, take a look at the following resources:
+```
+app/
+├── page.tsx              # Home page with product listing
+├── layout.tsx            # Root layout
+├── providers.tsx         # Context providers (theme, mobx)
+├── components/
+│   ├── Header.tsx        # Navigation header with cart badge
+│   └── Footer.tsx        # Footer with cart summary
+├── cart/
+│   └── page.tsx          # Shopping cart page
+└── product/[id]/details/
+    └── page.tsx          # Product detail page
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+lib/
+├── store.ts              # MobX cart store
+└── api.ts                # Fake Store API client
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+public/                   # Static assets
+```
 
-## Deploy on Vercel
+## Key Design Decisions
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### State Management with MobX
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+We chose MobX for the cart because it's lightweight and pairs well with React 19's reactivity patterns. The cart persists to sessionStorage automatically.
+
+### Session Storage vs. LocalStorage
+
+Cart data is stored in sessionStorage (not localStorage) to avoid persisting stale cart data across browser sessions. This works better for a typical e-commerce flow.
+
+### API Layer
+
+The `lib/api.ts` file wraps axios calls to the Fake Store API. This keeps API logic separate from components and makes it easier to swap providers later.
+
+## Known Limitations
+
+- Cart doesn't persist across browser tabs (sessionStorage limitation - intentional)
+- Checkout flow not implemented (placeholder button)
+- No user authentication
+- No real payment processing
+
+## Future Improvements
+
+- [ ] Add user authentication & accounts
+- [ ] Real checkout with Stripe integration
+- [ ] Order history & tracking
+- [ ] Product reviews & ratings from users
+- [ ] Wishlist/saved items
+- [ ] Product recommendations
+- [ ] Inventory management
+
+## Environment Variables
+
+Currently using the public Fake Store API. No env vars required.
+
+To use a custom API, create `.env.local`:
+```
+NEXT_PUBLIC_API_URL=https://your-api.com
+```
+
+## License
+
+MIT
